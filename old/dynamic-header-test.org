@@ -1,0 +1,509 @@
+#+TITLE:Testing dynamic headers
+#+AUTHOR: Johannes Rainer
+#+email: johannes.rainer@eurac.edu
+#+OPTIONS: ^:{}
+#+PROPERTY: exports code
+#+PROPERTY: session *R*
+#+PROPERTY: noweb yes
+#+PROPERTY: results output
+#+PROPERTY: tangle yes
+#+STARTUP: overview
+#+INFOJS_OPT: view:t toc:t ltoc:t mouse:underline buttons:0 path:http://thomasf.github.io/solarized-css/org-info.min.js
+#+HTML_HEAD: <link rel='stylesheet' type='text/css' href='http://thomasf.github.io/solarized-css/solarized-light.min.css' />
+#+LATEX_HEADER: \usepackage[backend=bibtex,style=nature,hyperref=true]{biblatex}
+#+LATEX_HEADER: \usepackage{parskip}
+#+LATEX_HEADER: \usepackage{tabu}
+#+LATEX_HEADER: \setlength{\textwidth}{17.0cm}
+#+LATEX_HEADER: \setlength{\hoffset}{-2.5cm}
+#+LATEX_HEADER: \setlength{\textheight}{22cm}
+#+LATEX_HEADER: \setlength{\voffset}{-1.5cm}
+#+LATEX_HEADER: \addbibresource{~/Documents/Unison/bib/references.bib}
+# #+LATEX_HEADER: \usepackage{verbatim}
+#+LATEX_HEADER: \usepackage{inconsolata}
+#+LATEX_HEADER: \definecolor{lightgrey}{HTML}{F0F0F0}
+#+LATEX_HEADER: \definecolor{solarizedlightbg}{HTML}{FCF4DC}
+#+LATEX_HEADER: \makeatletter
+# #+LATEX_HEADER: \def\verbatim@font{\scriptsize\ttfamily}
+#+LATEX_HEADER: \makeatother
+-----
+
+* Dynamic header test
+
+The purpose of this file is to test how we could set dynamically the header arguments of source code blocks. Apparently, the /old/ way to do this using lisp code to print and return the value does not work.
+
+** Using lisp code to print the value
+
+Here we are using lisp code to print the value, in this case the path to the image file name.
+
+#+BEGIN_SRC emacs-lisp :results silent :exports none :session lisp_test
+  (setq IMAGEPATH 'images/lisp-print)
+#+END_SRC
+
+loading R-code.
+
+#+NAME: src.load.libs
+#+BEGIN_SRC R :results silent :exports code
+  library(VennDiagram)
+#+END_SRC
+
+
+#+NAME: src.oldstyle
+#+BEGIN_SRC R :results silent :exports none
+  plot(3,3)
+#+END_SRC
+
+#+NAME: src.oldplot
+#+BEGIN_SRC R :results graphics :exports results :file (print (format "%s/%s" IMAGEPATH "plot.png")) :widht 10 :height 10 :units cm :pointsize 6 :res 600
+  <<src.oldstyle>>
+#+END_SRC
+
+#+ATTR_HTML: :width 600px
+#+ATTR_LATEX: :center :placement [H] :width 10cm
+#+CAPTION: plot
+#+RESULTS: src.oldplot
+
+#+NAME: src.venn.plot
+#+BEGIN_SRC R :results output graphics :exports results :file (print (format "%s/%s" IMAGEPATH "first.png")) :widht 10 :height 10 :units cm :pointsize 6 :res 600
+  Plots <- draw.pairwise.venn(area1=100, area2=200, cross.area=75,
+                              category=c( "well", "done" ), cat.col=c( "pink", "green" ),
+                              fill=c( "pink", "green" ))
+  print(Plots)
+#+END_SRC
+
+#+ATTR_HTML: :width 600px
+#+ATTR_LATEX: :center :placement [H] :width 10cm
+#+NAME: fig.first
+#+CAPTION: first
+#+RESULTS: src.venn.plot
+
+#+NAME: src.venn.plot.2
+#+BEGIN_SRC R :results output graphics :exports results :file (print (format "%s/%s" IMAGEPATH "second.png")) :width 10 :height 10 :units cm :pointsize 6 :res 600
+  var <- 3+3
+  <<src.venn.plot>>
+#+END_SRC
+#+ATTR_HTML: :width 600px
+#+ATTR_LATEX: :center :placement [H] :width 10cm
+#+NAME: fig.second
+#+CAPTION: second
+#+RESULTS: src.venn.plot.2
+
+#+NAME: src.venn.plot.3
+#+BEGIN_SRC R :results output graphics :exports results :file (print (format "%s/%s" IMAGEPATH "3.png")) :width 10 :height 10 :units cm :pointsize 6 :res 600
+  <<src.venn.plot>>
+#+END_SRC
+#+ATTR_HTML: :width 600px
+#+ATTR_LATEX: :center :placement [H] :width 10cm
+#+NAME: fig.3
+#+CAPTION: 3
+#+RESULTS: src.venn.plot.3
+
+#+NAME: src.venn.plot.4
+#+BEGIN_SRC R :results output graphics :exports results :file (print (format "%s/%s" IMAGEPATH "4.png")) :width 10 :height 10 :units cm :pointsize 6 :res 600
+  Test <- "sdfdff"
+  <<src.venn.plot>>
+#+END_SRC
+#+ATTR_HTML: :width 600px
+#+ATTR_LATEX: :center :placement [H] :width 10cm
+#+NAME: fig.4
+#+CAPTION: 4
+#+RESULTS: src.venn.plot.4
+
+#+NAME: src.venn.plot.5
+#+BEGIN_SRC R :results output graphics :exports results :file (print (format "%s/%s" IMAGEPATH "5.png")) :width 10 :height 10 :units cm :pointsize 6 :res 600
+  <<src.venn.plot>>
+#+END_SRC
+#+ATTR_HTML: :width 600px
+#+ATTR_LATEX: :center :placement [H] :width 10cm
+#+NAME: fig.5
+#+CAPTION: 5
+#+RESULTS: src.venn.plot.5
+
+#+NAME: src.venn.plot.6
+#+BEGIN_SRC R :results output graphics :exports results :file (print (format "%s/%s" IMAGEPATH "6.png")) :width 10 :height 10 :units cm :pointsize 6 :res 600
+  <<src.venn.plot>>
+#+END_SRC
+#+ATTR_HTML: :width 600px
+#+ATTR_LATEX: :center :placement [H] :width 10cm
+#+NAME: fig.6
+#+CAPTION: 6
+#+RESULTS: src.venn.plot.6
+
+#+NAME: src.venn.plot.7
+#+BEGIN_SRC R :results output graphics :exports results :file (print (format "%s/%s" IMAGEPATH "7.png")) :width 10 :height 10 :units cm :pointsize 6 :res 600
+  <<src.venn.plot>>
+#+END_SRC
+#+ATTR_HTML: :width 600px
+#+ATTR_LATEX: :center :placement [H] :width 10cm
+#+NAME: fig.7
+#+CAPTION: 7
+#+RESULTS: src.venn.plot.7
+
+#+NAME: src.venn.plot.8
+#+BEGIN_SRC R :results output graphics :exports results :file (print (format "%s/%s" IMAGEPATH "8.png")) :width 10 :height 10 :units cm :pointsize 6 :res 600
+  <<src.venn.plot>>
+#+END_SRC
+#+ATTR_HTML: :width 600px
+#+ATTR_LATEX: :center :placement [H] :width 10cm
+#+NAME: fig.8
+#+CAPTION: 8
+#+RESULTS: src.venn.plot.8
+
+#+NAME: src.venn.plot.9
+#+BEGIN_SRC R :results output graphics :exports results :file (print (format "%s/%s" IMAGEPATH "9.png")) :width 10 :height 10 :units cm :pointsize 6 :res 600
+  <<src.venn.plot>>
+#+END_SRC
+#+ATTR_HTML: :width 600px
+#+ATTR_LATEX: :center :placement [H] :width 10cm
+#+NAME: fig.9
+#+CAPTION: 9
+#+RESULTS: src.venn.plot.9
+
+#+NAME: src.venn.plot.10
+#+BEGIN_SRC R :results output graphics :exports results :file (print (format "%s/%s" IMAGEPATH "10.png")) :width 10 :height 10 :units cm :pointsize 6 :res 600
+  <<src.venn.plot>>
+#+END_SRC
+#+ATTR_HTML: :width 600px
+#+ATTR_LATEX: :center :placement [H] :width 10cm
+#+NAME: fig.10
+#+CAPTION: 10
+#+RESULTS: src.venn.plot.10
+
+#+NAME: src.venn.plot.11
+#+BEGIN_SRC R :results output graphics :exports results :file (print (format "%s/%s" IMAGEPATH "11.png")) :width 10 :height 10 :units cm :pointsize 6 :res 600
+  <<src.venn.plot>>
+#+END_SRC
+#+ATTR_HTML: :width 600px
+#+ATTR_LATEX: :center :placement [H] :width 10cm
+#+NAME: fig.11
+#+CAPTION: 11
+#+RESULTS: src.venn.plot.11
+
+#+NAME: src.venn.plot.12
+#+BEGIN_SRC R :results output graphics :exports results :file (print (format "%s/%s" IMAGEPATH "12.png")) :width 10 :height 10 :units cm :pointsize 6 :res 600
+  <<src.venn.plot>>
+#+END_SRC
+#+ATTR_HTML: :width 600px
+#+ATTR_LATEX: :center :placement [H] :width 10cm
+#+NAME: fig.12
+#+CAPTION: 12
+#+RESULTS: src.venn.plot.12
+
+
+
+
+** Using =org-sbe=
+
+defining the image path:
+
+#+NAME: imagepath
+: images/lisp-print-2/
+
+loading R-code.
+
+#+NAME: src.load.libs
+#+BEGIN_SRC R :results silent :exports code
+  library(VennDiagram)
+#+END_SRC
+
+
+#+NAME: src.oldstyle
+#+BEGIN_SRC R :results silent :exports none
+  plot(3,3)
+#+END_SRC
+
+#+NAME: src.oldplot
+#+BEGIN_SRC R :results graphics :exports results :file (concat (org-sbe imagepath) "plot.png") :widht 10 :height 10 :units cm :pointsize 6 :res 600
+  <<src.oldstyle>>
+#+END_SRC
+
+#+ATTR_HTML: :width 600px
+#+ATTR_LATEX: :center :placement [H] :width 10cm
+#+CAPTION: plot
+#+RESULTS: src.oldplot
+
+#+NAME: src.venn.plot
+#+BEGIN_SRC R :results output graphics :exports results :file (concat (org-sbe imagepath) "first.png") :widht 10 :height 10 :units cm :pointsize 6 :res 600
+  Plots <- draw.pairwise.venn(area1=100, area2=200, cross.area=75,
+			      category=c( "well", "done" ), cat.col=c( "pink", "green" ),
+			      fill=c( "pink", "green" ))
+  print(Plots)
+#+END_SRC
+
+#+ATTR_HTML: :width 600px
+#+ATTR_LATEX: :center :placement [H] :width 10cm
+#+NAME: fig.first
+#+CAPTION: first
+#+RESULTS: src.venn.plot
+
+#+NAME: src.venn.plot.2
+#+BEGIN_SRC R :results output graphics :exports results :file (concat (org-sbe imagepath) "second.png") :width 10 :height 10 :units cm :pointsize 6 :res 600
+  var <- 3+3
+  <<src.venn.plot>>
+#+END_SRC
+#+ATTR_HTML: :width 600px
+#+ATTR_LATEX: :center :placement [H] :width 10cm
+#+NAME: fig.second
+#+CAPTION: second
+#+RESULTS: src.venn.plot.2
+
+#+NAME: src.venn.plot.3
+#+BEGIN_SRC R :results output graphics :exports results :file (concat (org-sbe imagepath) "3.png") :width 10 :height 10 :units cm :pointsize 6 :res 600
+  <<src.venn.plot>>
+#+END_SRC
+#+ATTR_HTML: :width 600px
+#+ATTR_LATEX: :center :placement [H] :width 10cm
+#+NAME: fig.3
+#+CAPTION: 3
+#+RESULTS: src.venn.plot.3
+
+#+NAME: src.venn.plot.4
+#+BEGIN_SRC R :results output graphics :exports results :file (concat (org-sbe imagepath) "4.png") :width 10 :height 10 :units cm :pointsize 6 :res 600
+  Test <- "sdfdff"
+  <<src.venn.plot>>
+#+END_SRC
+#+ATTR_HTML: :width 600px
+#+ATTR_LATEX: :center :placement [H] :width 10cm
+#+NAME: fig.4
+#+CAPTION: 4
+#+RESULTS: src.venn.plot.4
+
+#+NAME: src.venn.plot.5
+#+BEGIN_SRC R :results output graphics :exports results :file (concat (org-sbe imagepath) "5.png") :width 10 :height 10 :units cm :pointsize 6 :res 600
+  <<src.venn.plot>>
+#+END_SRC
+#+ATTR_HTML: :width 600px
+#+ATTR_LATEX: :center :placement [H] :width 10cm
+#+NAME: fig.5
+#+CAPTION: 5
+#+RESULTS: src.venn.plot.5
+
+#+NAME: src.venn.plot.6
+#+BEGIN_SRC R :results output graphics :exports results :file (concat (org-sbe imagepath) "6.png") :width 10 :height 10 :units cm :pointsize 6 :res 600
+  <<src.venn.plot>>
+#+END_SRC
+#+ATTR_HTML: :width 600px
+#+ATTR_LATEX: :center :placement [H] :width 10cm
+#+NAME: fig.6
+#+CAPTION: 6
+#+RESULTS: src.venn.plot.6
+
+#+NAME: src.venn.plot.7
+#+BEGIN_SRC R :results output graphics :exports results :file (concat (org-sbe imagepath) "7.png") :width 10 :height 10 :units cm :pointsize 6 :res 600
+  <<src.venn.plot>>
+#+END_SRC
+#+ATTR_HTML: :width 600px
+#+ATTR_LATEX: :center :placement [H] :width 10cm
+#+NAME: fig.7
+#+CAPTION: 7
+#+RESULTS: src.venn.plot.7
+
+#+NAME: src.venn.plot.8
+#+BEGIN_SRC R :results output graphics :exports results :file (concat (org-sbe imagepath) "8.png") :width 10 :height 10 :units cm :pointsize 6 :res 600
+  <<src.venn.plot>>
+#+END_SRC
+#+ATTR_HTML: :width 600px
+#+ATTR_LATEX: :center :placement [H] :width 10cm
+#+NAME: fig.8
+#+CAPTION: 8
+#+RESULTS: src.venn.plot.8
+
+#+NAME: src.venn.plot.9
+#+BEGIN_SRC R :results output graphics :exports results :file (concat (org-sbe imagepath) "9.png") :width 10 :height 10 :units cm :pointsize 6 :res 600
+  <<src.venn.plot>>
+#+END_SRC
+#+ATTR_HTML: :width 600px
+#+ATTR_LATEX: :center :placement [H] :width 10cm
+#+NAME: fig.9
+#+CAPTION: 9
+#+RESULTS: src.venn.plot.9
+
+#+NAME: src.venn.plot.10
+#+BEGIN_SRC R :results output graphics :exports results :file (concat (org-sbe imagepath) "10.png") :width 10 :height 10 :units cm :pointsize 6 :res 600
+  <<src.venn.plot>>
+#+END_SRC
+#+ATTR_HTML: :width 600px
+#+ATTR_LATEX: :center :placement [H] :width 10cm
+#+NAME: fig.10
+#+CAPTION: 10
+#+RESULTS: src.venn.plot.10
+
+#+NAME: src.venn.plot.11
+#+BEGIN_SRC R :results output graphics :exports results :file (concat (org-sbe imagepath) "11.png") :width 10 :height 10 :units cm :pointsize 6 :res 600
+  <<src.venn.plot>>
+#+END_SRC
+#+ATTR_HTML: :width 600px
+#+ATTR_LATEX: :center :placement [H] :width 10cm
+#+NAME: fig.11
+#+CAPTION: 11
+#+RESULTS: src.venn.plot.11
+
+#+NAME: src.venn.plot.12
+#+BEGIN_SRC R :results output graphics :exports results :file (concat (org-sbe imagepath) "12.png") :width 10 :height 10 :units cm :pointsize 6 :res 600
+  <<src.venn.plot>>
+#+END_SRC
+#+ATTR_HTML: :width 600px
+#+ATTR_LATEX: :center :placement [H] :width 10cm
+#+NAME: fig.12
+#+CAPTION: 12
+#+RESULTS: src.venn.plot.12
+
+
+
+** Using =org-sbe=; just duplicating code chunks...
+
+defining the image path:
+
+#+NAME: imagepath.3
+: images/lisp-print-3/
+
+loading R-code.
+
+#+NAME: src.load.libs.next
+#+BEGIN_SRC R :results silent :exports code
+  library(VennDiagram)
+#+END_SRC
+
+
+#+NAME: src.oldstyle.next
+#+BEGIN_SRC R :results silent :exports none
+  plot(3,3)
+#+END_SRC
+
+#+NAME: src.oldplot.next
+#+BEGIN_SRC R :results graphics :exports results :file (concat (org-sbe imagepath) "plot.png") :widht 10 :height 10 :units cm :pointsize 6 :res 600
+  <<src.oldstyle>>
+#+END_SRC
+
+#+ATTR_HTML: :width 600px
+#+ATTR_LATEX: :center :placement [H] :width 10cm
+#+CAPTION: plot
+#+RESULTS: src.oldplot.next
+
+#+NAME: src.venn.plot.next
+#+BEGIN_SRC R :results output graphics :exports results :file (concat (org-sbe imagepath) "first.png") :widht 10 :height 10 :units cm :pointsize 6 :res 600
+  Plots <- draw.pairwise.venn(area1=100, area2=200, cross.area=75,
+			      category=c( "well", "done" ), cat.col=c( "pink", "green" ),
+			      fill=c( "pink", "green" ))
+  print(Plots)
+#+END_SRC
+
+#+ATTR_HTML: :width 600px
+#+ATTR_LATEX: :center :placement [H] :width 10cm
+#+NAME: fig.first.next
+#+CAPTION: first
+#+RESULTS: src.venn.plot.next
+
+#+NAME: src.venn.plot.2.next
+#+BEGIN_SRC R :results output graphics :exports results :file (concat (org-sbe imagepath) "second.png") :width 10 :height 10 :units cm :pointsize 6 :res 600
+  var <- 3+3
+  <<src.venn.plot>>
+#+END_SRC
+#+ATTR_HTML: :width 600px
+#+ATTR_LATEX: :center :placement [H] :width 10cm
+#+NAME: fig.second
+#+CAPTION: second
+#+RESULTS: src.venn.plot.2.next
+
+#+NAME: src.venn.plot.3.next
+#+BEGIN_SRC R :results output graphics :exports results :file (concat (org-sbe imagepath) "3.png") :width 10 :height 10 :units cm :pointsize 6 :res 600
+  <<src.venn.plot>>
+#+END_SRC
+#+ATTR_HTML: :width 600px
+#+ATTR_LATEX: :center :placement [H] :width 10cm
+#+NAME: fig.3.next
+#+CAPTION: 3
+#+RESULTS: src.venn.plot.3.next
+
+#+NAME: src.venn.plot.4.next
+#+BEGIN_SRC R :results output graphics :exports results :file (concat (org-sbe imagepath) "4.png") :width 10 :height 10 :units cm :pointsize 6 :res 600
+  Test <- "sdfdff"
+  <<src.venn.plot>>
+#+END_SRC
+#+ATTR_HTML: :width 600px
+#+ATTR_LATEX: :center :placement [H] :width 10cm
+#+NAME: fig.4.next
+#+CAPTION: 4
+#+RESULTS: src.venn.plot.4.next
+
+#+NAME: src.venn.plot.5.next
+#+BEGIN_SRC R :results output graphics :exports results :file (concat (org-sbe imagepath) "5.png") :width 10 :height 10 :units cm :pointsize 6 :res 600
+  <<src.venn.plot>>
+#+END_SRC
+#+ATTR_HTML: :width 600px
+#+ATTR_LATEX: :center :placement [H] :width 10cm
+#+NAME: fig.5.next
+#+CAPTION: 5
+#+RESULTS: src.venn.plot.5.next
+
+#+NAME: src.venn.plot.6.next
+#+BEGIN_SRC R :results output graphics :exports results :file (concat (org-sbe imagepath) "6.png") :width 10 :height 10 :units cm :pointsize 6 :res 600
+  <<src.venn.plot>>
+#+END_SRC
+#+ATTR_HTML: :width 600px
+#+ATTR_LATEX: :center :placement [H] :width 10cm
+#+NAME: fig.6.next
+#+CAPTION: 6
+#+RESULTS: src.venn.plot.6.next
+
+#+NAME: src.venn.plot.7.next
+#+BEGIN_SRC R :results output graphics :exports results :file (concat (org-sbe imagepath) "7.png") :width 10 :height 10 :units cm :pointsize 6 :res 600
+  <<src.venn.plot>>
+#+END_SRC
+#+ATTR_HTML: :width 600px
+#+ATTR_LATEX: :center :placement [H] :width 10cm
+#+NAME: fig.7.next
+#+CAPTION: 7
+#+RESULTS: src.venn.plot.7.next
+
+#+NAME: src.venn.plot.8.next
+#+BEGIN_SRC R :results output graphics :exports results :file (concat (org-sbe imagepath) "8.png") :width 10 :height 10 :units cm :pointsize 6 :res 600
+  <<src.venn.plot>>
+#+END_SRC
+#+ATTR_HTML: :width 600px
+#+ATTR_LATEX: :center :placement [H] :width 10cm
+#+NAME: fig.8.next
+#+CAPTION: 8
+#+RESULTS: src.venn.plot.8.next
+
+#+NAME: src.venn.plot.9.next
+#+BEGIN_SRC R :results output graphics :exports results :file (concat (org-sbe imagepath) "9.png") :width 10 :height 10 :units cm :pointsize 6 :res 600
+  <<src.venn.plot>>
+#+END_SRC
+#+ATTR_HTML: :width 600px
+#+ATTR_LATEX: :center :placement [H] :width 10cm
+#+NAME: fig.9.next
+#+CAPTION: 9
+#+RESULTS: src.venn.plot.9.next
+
+#+NAME: src.venn.plot.10.next
+#+BEGIN_SRC R :results output graphics :exports results :file (concat (org-sbe imagepath) "10.png") :width 10 :height 10 :units cm :pointsize 6 :res 600
+  <<src.venn.plot>>
+#+END_SRC
+#+ATTR_HTML: :width 600px
+#+ATTR_LATEX: :center :placement [H] :width 10cm
+#+NAME: fig.10.next
+#+CAPTION: 10
+#+RESULTS: src.venn.plot.10.next
+
+#+NAME: src.venn.plot.11.next
+#+BEGIN_SRC R :results output graphics :exports results :file (concat (org-sbe imagepath) "11.png") :width 10 :height 10 :units cm :pointsize 6 :res 600
+  <<src.venn.plot>>
+#+END_SRC
+#+ATTR_HTML: :width 600px
+#+ATTR_LATEX: :center :placement [H] :width 10cm
+#+NAME: fig.11.next
+#+CAPTION: 11
+#+RESULTS: src.venn.plot.11.next
+
+#+NAME: src.venn.plot.12.next
+#+BEGIN_SRC R :results output graphics :exports results :file (concat (org-sbe imagepath) "12.png") :width 10 :height 10 :units cm :pointsize 6 :res 600
+  <<src.venn.plot>>
+#+END_SRC
+#+ATTR_HTML: :width 600px
+#+ATTR_LATEX: :center :placement [H] :width 10cm
+#+NAME: fig.12.next
+#+CAPTION: 12
+#+RESULTS: src.venn.plot.12.next
+
+
+

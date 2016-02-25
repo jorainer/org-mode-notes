@@ -1,0 +1,78 @@
+#+TITLE: org-mode and rmarkdown for literature programming
+#+AUTHOR: Johannes Rainer
+#+email: johannes.rainer@eurac.edu
+#+SETUPFILE: orgsetup.org
+#+FILETAGS:
+#+CATEGORY:
+-----
+
+#+BEGIN_EXPORT md
+---
+graphics: yes
+output:
+  BiocStyle::html_document:
+    toc_depth: 2
+  BiocStyle::pdf_document:
+    toc_depth: 2
+# bibliography: references.bib
+# csl: biomed-central.csl
+# references:
+# - id: dummy
+#   title: no title
+#   author:
+#   - family: noname
+#     given: noname
+---
+#+END_EXPORT
+
+
+* Some notes on the usage of =org-mode= for literature programming
+
+Emacs =org-mode= works nice, but sometimes it might also be helpful to have the
+analysis documents ready in =Rmd= format (i.e. for =rmarkdown=). This comes
+especially handy for sharing analysis documents with people not using Emacs. The
+[[https://github.com/chasberry/orgmode-accessories.git][orgmode-accessories]] provide an export function to convert =org= files to =Rmd=,
+but not all options etc from =org-mode= are directly and correctly mapped. Thus,
+in this document I try to define some rules that allow to export =org= files
+into =Rmd= files that can be rendered into comparable documents.
+
+** File setup
+
+We can include an external containing some common definitions which might then
+also be re-used by other files. To include this file we can add the
+=#+SETUPFILE: <file name>= line to the beginning of the file. For this =org=
+file we're using [[file:orgsetup.org]]. Note however, that all =rmarkdown= related
+headers and settings have to be defined within the actual document, as the
+=ox-ravel= exporter does not read that setup file. The setup for the =Rmd= file
+has to be placed within =#+BEGIN_EXPORT md= and =#+END_EXPORT= lines (see
+header of this file for an example).
+
+** Code blocks
+
+To enable both =org-mode= export and =rmarkdown= rendering we have to define
+header arguments for both, i.e. the =org-mode= header arguments as we're used
+to, and in addition =,= delimited header arguments for =rmarkdown= following the
+=:ravel= keyword. The =ox-ravel= exporter from the =orgmode-accessories= package
+will include only these into the source block header of the exported  =Rmd=
+file.
+
+#+NAME: libraries
+#+BEGIN_SRC R :results silent :ravel results='hide'
+  library(ascii)
+  ## Just some plain dummy R-code
+  3 + 3
+#+END_SRC
+
+
+** Figures
+
+** Tables
+
+** Code block re-usage
+
+=org-mode= supports =noweb= syntax, i.e. code blocks can be re-used in another
+code block using =<<code-name>>=. From my experience, in contrast to
+e.g. =Sweave=, this should be used with caution, as larger analysis documents
+with lots of reused code blocks can become slow or even unresponsive when
+processed and exported in Emacs.
+
